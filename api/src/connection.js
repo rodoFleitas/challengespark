@@ -1,9 +1,8 @@
 const mongoose = require("mongoose");
 
-const uri = "mongodb://localhost:27017/myfirstdb";
 const db = mongoose.connection
 
-mongoose.connect(uri, {
+mongoose.connect(process.env.URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useCreateIndex: true,
