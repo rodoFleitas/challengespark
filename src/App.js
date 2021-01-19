@@ -1,9 +1,12 @@
 import React from 'react'
+import Login from './components/Login.jsx'
+import Register from './components/Register.jsx'
 
 const App = () => {
   return (
     <div>
-      <h1>Hello World</h1>
+      {/* <Login /> */}
+      <Register />
     </div>
   )
 }
