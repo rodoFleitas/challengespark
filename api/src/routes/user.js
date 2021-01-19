@@ -92,14 +92,30 @@ server.get("/logout", (req, res) => {
 server.put('/edit/:id', (req, res, next) => {
   const { id } = req.params;
   const data = req.body
-  User.findOneAndUpdate({_id : id}, data, {new:true}).then(user => res.json({message: 'Usuario modificado'}))
+  User.findOneAndUpdate({_id : id}, data, {new:true}).then(() => {
+    User.find()
+    .then((users) => {
+      if (!users) {
+        return res.status(400).json({ message: "No se encontraron usuarios" });
+      }
+      res.status(200).json(users);
+    })
+  })
 })
 
 //Ruta para eliminar un usuario
 
 server.delete('/delete/:id', (req, res, next) => {
   const { id } = req.params;
-  User.findOneAndDelete({_id : id}).then(() => res.json({message: `El usuario con ID ${id} ah sido eliminado`}))
+  User.findOneAndDelete({_id : id}).then(() => {
+    User.find()
+    .then((users) => {
+      if (!users) {
+        return res.status(400).json({ message: "No se encontraron usuarios" });
+      }
+      res.status(200).json(users);
+    })
+  })
 })
 
 //Ruta para traer todos los usuarios
