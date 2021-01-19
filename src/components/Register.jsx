@@ -12,8 +12,12 @@ import {
 } from "@material-ui/core";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import { makeStyles } from "@material-ui/core/styles";
+import { useDispatch } from "react-redux";
+import { createUser } from "../Redux/Action/myUserAction";
 
 const Register = () => {
+
+  const dispatch = useDispatch()
   const classes = useStyles();
 
   const initialValues = {
@@ -26,7 +30,7 @@ const Register = () => {
   };
 
   const onSubmit = (values, { resetForm }) => {
-    console.log(values);
+    dispatch(createUser(values))
     resetForm();
   };
 
@@ -77,7 +81,7 @@ const Register = () => {
         >
           {({ errors, touched }) => (
             <Form className={classes.form}>
-              <Grid container spacing={2}>
+              <Grid container spacing={1}>
                 <Grid item xs={12} sm={6}>
                   <Field
                     as={TextField}
@@ -188,7 +192,7 @@ const Register = () => {
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: theme.spacing(10),
+    marginTop: theme.spacing(1),
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
@@ -199,7 +203,7 @@ const useStyles = makeStyles((theme) => ({
   },
   form: {
     width: "100%",
-    marginTop: theme.spacing(3),
+    marginTop: theme.spacing(1),
   },
   submit: {
     margin: theme.spacing(3, 0, 2),

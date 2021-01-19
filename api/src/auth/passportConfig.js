@@ -6,11 +6,12 @@ passport.use("login", new localPassport({
     usernameField: 'email',
     passwordField: 'password'
 }, (email, password, done) => {
-        User.findOne({email: email}).then(user => {
+        User.findOne({email: email}).then(async (user) => {
             if (!user) {
                 return done(null, false, {message: "Usuario no encontrado o inexistente."})
             }
-            if (!user.matchPassword(password)) {
+            const auth = await user.matchPassword(password)
+            if (!auth) {
                 return done(null, false, {message: "Contraseña invalida"})
             }
             return done(null, user, {message: "Bienvenido de nuevo"})

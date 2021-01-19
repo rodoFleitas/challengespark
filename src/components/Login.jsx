@@ -8,18 +8,21 @@ import {
   Container,
   Button,
   Avatar,
+  Link,
 } from "@material-ui/core";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import { makeStyles } from "@material-ui/core/styles";
-
+import { useDispatch } from "react-redux";
+import { logInUser } from "../Redux/Action/myUserAction";
 
 const Login = () => {
+  const dispatch = useDispatch()
   const classes = useStyles();
 
   const initialValues = { email: "", password: "" };
 
   const onSubmit = (values, { resetForm }) => {
-    console.log(values);
+    dispatch(logInUser(values))
     resetForm();
   };
 
@@ -70,7 +73,7 @@ const Login = () => {
               <Field
                 as={TextField}
                 id="password"
-                type="text"
+                type="password"
                 name="password"
                 label="Contraseña"
                 variant="outlined"
@@ -89,6 +92,9 @@ const Login = () => {
               >
                 Enviar
               </Button>
+              <Link href="/register" variant="body2">
+                {"¿No tienes una cuenta? Registrate"}
+              </Link>
             </Form>
           )}
         </Formik>
@@ -97,17 +103,16 @@ const Login = () => {
   );
 };
 
-
 const useStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: theme.spacing(10),
+    marginTop: "30%",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
   },
   avatar: {
     margin: theme.spacing(1),
-    backgroundColor: '#3A3635',
+    backgroundColor: "#3A3635",
   },
   form: {
     width: "100%",
@@ -117,6 +122,5 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(3, 0, 2),
   },
 }));
-
 
 export default Login;

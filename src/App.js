@@ -1,12 +1,19 @@
 import React from 'react'
-import Login from './components/Login.jsx'
-import Register from './components/Register.jsx'
+import { useSelector } from "react-redux";
+import NavBar from './components/NavBar.jsx'
+import PrivateRoutes from './Routes/privateRoutes.js'
+import PublicRoutes from './Routes/publicRoutes.js'
 
 const App = () => {
+
+  const userLog = useSelector((state) => state.myuser)
+  const isAdmin = userLog.userLog.admin
+
   return (
     <div>
-      {/* <Login /> */}
-      <Register />
+      <NavBar />
+      <PrivateRoutes isAdmin={isAdmin} />
+      <PublicRoutes />
     </div>
   )
 }

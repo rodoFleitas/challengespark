@@ -52,8 +52,8 @@ export const userProfile = () => (dispatch) => {
 
 
 export const createUser = (data) => {
-  Axios.post(`${url}/user/register`, data).then(() => {
-    return window.location.replace("/login");
+  Axios.post(`${url}/users/register`, data).then(() => {
+    return window.location.replace("/");
   });
 };
 
