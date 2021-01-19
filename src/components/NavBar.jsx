@@ -1,16 +1,26 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import {AppBar, Toolbar, Typography, IconButton, MenuItem, Menu} from '@material-ui/core';
-import AccountCircle from '@material-ui/icons/AccountCircle';
+import React, { useState } from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  IconButton,
+  MenuItem,
+  Menu,
+} from "@material-ui/core";
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import { useDispatch, useSelector } from "react-redux";
+import { logOutUser } from "../Redux/Action/myUserAction";
 
-
-
-
-const NavBar = () => {
+const NavBar = ({ isAuth }) => {
   const classes = useStyles();
-  const [auth, setAuth] = React.useState(true);
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [auth, setAuth] = useState(isAuth);
+  const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
+
+  const dispatch = useDispatch();
+
+  const name = useSelector((state) => state.myuser.userLog);
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -22,12 +32,15 @@ const NavBar = () => {
 
   return (
     <div className={classes.root}>
-      <AppBar position="fixed" style={{color: '#000', backgroundColor: '#515151'}}>
+      <AppBar
+        position="fixed"
+        className={classes.nav}
+      >
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
-            Rodrigo Fleitas
+            {auth ? `${name.name} ${name.lastname}` : `Bienvenido`}
           </Typography>
-          {auth && (
+          {auth ? (
             <div>
               <IconButton
                 aria-label="account of current user"
@@ -36,36 +49,38 @@ const NavBar = () => {
                 onClick={handleMenu}
                 color="inherit"
               >
-                <AccountCircle />
+                <ExitToAppIcon />
               </IconButton>
               <Menu
                 id="menu-appbar"
                 anchorEl={anchorEl}
                 anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
+                  vertical: "top",
+                  horizontal: "right",
                 }}
                 keepMounted
                 transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
+                  vertical: "top",
+                  horizontal: "right",
                 }}
                 open={open}
                 onClose={handleClose}
               >
-                <MenuItem onClick={handleClose}>Profile</MenuItem>
-                <MenuItem onClick={handleClose}>My account</MenuItem>
+                <MenuItem onClick={() => dispatch(logOutUser())}>
+                  Cerrar Sesion
+                </MenuItem>
               </Menu>
             </div>
-          )}
+          ) : null}
         </Toolbar>
       </AppBar>
       <Toolbar />
     </div>
   );
-}
+};
 
 const useStyles = makeStyles((theme) => ({
+  nav: { color: "#ffffff", backgroundColor: "#000000" },
   root: {
     flexGrow: 1,
   },

@@ -35,7 +35,7 @@ export const logOutUser = () => (dispatch) => {
       payload: { userLog },
     });
     localStorage.clear();
-    return window.location.replace(`/login`);
+    return window.location.replace(`/`);
   });
 };
 
