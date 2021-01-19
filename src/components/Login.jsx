@@ -1,6 +1,5 @@
 import React from "react";
 import { ErrorMessage, Field, Form, Formik } from "formik";
-import * as Yup from "yup";
 import {
   CssBaseline,
   TextField,
@@ -11,37 +10,26 @@ import {
   Link,
 } from "@material-ui/core";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import { makeStyles } from "@material-ui/core/styles";
+import { useStyles } from "./styles";
 import { useDispatch } from "react-redux";
 import { logInUser } from "../Redux/Action/myUserAction";
+import { validationLogin } from "./validations";
 
 const Login = () => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const classes = useStyles();
 
   const initialValues = { email: "", password: "" };
 
   const onSubmit = (values, { resetForm }) => {
-    dispatch(logInUser(values))
+    dispatch(logInUser(values));
     resetForm();
   };
-
-  const validation = Yup.object({
-    email: Yup.string()
-      .matches(
-        /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
-        "Ingrese un correo valido"
-      )
-      .required("Este campo es obligatorio."),
-    password: Yup.string().required(
-      "Se requiere la contraseña para continuar."
-    ),
-  });
 
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
-      <div className={classes.paper}>
+      <div className={classes.paperlogin}>
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
         </Avatar>
@@ -51,7 +39,7 @@ const Login = () => {
         <Formik
           enableReinitialize={true}
           initialValues={initialValues}
-          validationSchema={validation}
+          validationSchema={validationLogin}
           onSubmit={onSubmit}
         >
           {({ errors, touched }) => (
@@ -90,7 +78,7 @@ const Login = () => {
                 color="primary"
                 className={classes.submit}
               >
-                Enviar
+                Iniciar
               </Button>
               <Link href="/register" variant="body2">
                 {"¿No tienes una cuenta? Registrate"}
@@ -102,25 +90,5 @@ const Login = () => {
     </Container>
   );
 };
-
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    marginTop: "30%",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: "#3A3635",
-  },
-  form: {
-    width: "100%",
-    marginTop: theme.spacing(1),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-}));
 
 export default Login;

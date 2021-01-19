@@ -14,7 +14,6 @@ import { logOutUser } from "../Redux/Action/myUserAction";
 
 const NavBar = ({ isAuth }) => {
   const classes = useStyles();
-  const [auth, setAuth] = useState(isAuth);
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
@@ -38,9 +37,9 @@ const NavBar = ({ isAuth }) => {
       >
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
-            {auth ? `${name.name} ${name.lastname}` : `Bienvenido`}
+            {isAuth ? (`${name.name} ${name.lastname}`) : 'Bienvenido'}
           </Typography>
-          {auth ? (
+          {isAuth ? (
             <div>
               <IconButton
                 aria-label="account of current user"

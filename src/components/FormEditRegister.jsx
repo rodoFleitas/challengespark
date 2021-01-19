@@ -1,6 +1,5 @@
 import React from "react";
 import { ErrorMessage, Field, Form, Formik } from "formik";
-import * as Yup from "yup";
 import {
   Avatar,
   Button,
@@ -10,73 +9,64 @@ import {
   Typography,
   Container,
 } from "@material-ui/core";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import { makeStyles } from "@material-ui/core/styles";
+import PersonAddOutlinedIcon from '@material-ui/icons/PersonAddOutlined';
+import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import { useDispatch } from "react-redux";
-import { createUser } from "../Redux/Action/myUserAction";
+import { createUser, editUser } from "../Redux/Action/usersAction";
+import { validationEdit, validationRegister } from "./validations";
+import {useStyles} from './styles'
 
-const Register = () => {
-
-  const dispatch = useDispatch()
+const FormEditRegister = ({ edit, user, handleClose }) => {
+  const dispatch = useDispatch();
   const classes = useStyles();
 
   const initialValues = {
-    name: "",
-    lastName: "",
-    email: "",
-    password: "",
-    document: "",
-    home: "",
+    name: edit ? user.name : "",
+    lastName: edit ? user.lastName : "",
+    email: edit ? user.email : "",
+    password: edit ? user.password : "",
+    document: edit ? user.document : "",
+    home: edit ? user.home : "",
   };
 
   const onSubmit = (values, { resetForm }) => {
-    dispatch(createUser(values))
+    if (edit) {
+      const id = user._id;
+      const data = {
+        name: values.name,
+        lastName: values.lastName,
+        email: values.email,
+        home: values.home,
+        document: values.document,
+      };
+      console.log(data, id);
+      dispatch(editUser(id, data));
+    } else {
+      dispatch(createUser(values));
+    }
     resetForm();
   };
-
-  const validation = Yup.object({
-    name: Yup.string()
-      .min(3, "Minimo 3 caracteres")
-      .max(30, "Tu nombre es espectacular, pero resumamos.")
-      .required("Este campo es obligatorio."),
-    lastName: Yup.string()
-      .min(3, "Minimo 3 caracteres")
-      .max(30, "Tu apellido es espectacular, pero resumamos.")
-      .required("Este campo es obligatorio."),
-    email: Yup.string()
-      .matches(
-        /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
-        "Ingrese un correo valido"
-      )
-      .required("Este campo es obligatorio."),
-    password: Yup.string()
-      .min(8, "Minimo 8 caracteres")
-      .max(16, "Contraseña segura pero ya es demasiado.")
-      .required("Se requiere una contraseña para continuar."),
-    document: Yup.number()
-      .min(0, "Minimo 7 numeros")
-      .max(9999999999, "Aún dudamos de que exista ese documento")
-      .required("Este campo es obligatorio."),
-    home: Yup.string()
-      .min(3, "Minimo 3 caracteres")
-      .max(250, "Excelente descripcion, pero resumamos.")
-      .required("Este campo es obligatorio."),
-  });
 
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
-      <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
-        </Avatar>
+      <div className={classes.paperform}>
+        {edit ? (
+          <Avatar className={classes.avatar}>
+            <EditOutlinedIcon />
+          </Avatar>
+        ) : (
+          <Avatar className={classes.avatar}>
+            <PersonAddOutlinedIcon />
+          </Avatar>
+        )}
         <Typography component="h1" variant="h5">
-          Registrarse
+          {edit ? `Editar datos de ${user.name}` : `Registrarse`}
         </Typography>
         <Formik
           enableReinitialize={true}
           initialValues={initialValues}
-          validationSchema={validation}
+          validationSchema={edit ? validationEdit : validationRegister}
           onSubmit={onSubmit}
         >
           {({ errors, touched }) => (
@@ -85,7 +75,6 @@ const Register = () => {
                 <Grid item xs={12} sm={6}>
                   <Field
                     as={TextField}
-                    id="name"
                     name="name"
                     type="name"
                     label="Nombre(s)"
@@ -99,9 +88,8 @@ const Register = () => {
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                <Field
+                  <Field
                     as={TextField}
-                    id="lastName"
                     name="lastName"
                     type="lastName"
                     label="Apellido(s)"
@@ -114,9 +102,8 @@ const Register = () => {
                   />
                 </Grid>
                 <Grid item xs={12}>
-                <Field
+                  <Field
                     as={TextField}
-                    id="document"
                     name="document"
                     type="document"
                     label="Documento"
@@ -128,9 +115,8 @@ const Register = () => {
                   />
                 </Grid>
                 <Grid item xs={12}>
-                <Field
+                  <Field
                     as={TextField}
-                    id="home"
                     name="home"
                     type="home"
                     label="Dirección"
@@ -145,7 +131,6 @@ const Register = () => {
                 <Grid item xs={12}>
                   <Field
                     as={TextField}
-                    id="email"
                     name="email"
                     type="email"
                     label="Correo"
@@ -157,31 +142,48 @@ const Register = () => {
                     error={errors.email && touched.email ? true : false}
                   />
                 </Grid>
-                <Grid item xs={12}>
-                  <Field
-                    as={TextField}
-                    id="password"
-                    type="password"
-                    name="password"
-                    label="Contraseña"
-                    variant="outlined"
-                    margin="normal"
-                    fullWidth
-                    autoComplete="current-password"
-                    helperText={<ErrorMessage name="password" />}
-                    error={errors.password && touched.password ? true : false}
-                  />
-                </Grid>
+                {!edit ? (
+                  <Grid item xs={12}>
+                    <Field
+                      as={TextField}
+                      type="password"
+                      name="password"
+                      label="Contraseña"
+                      variant="outlined"
+                      margin="normal"
+                      fullWidth
+                      autoComplete="current-password"
+                      helperText={<ErrorMessage name="password" />}
+                      error={errors.password && touched.password ? true : false}
+                    />
+                  </Grid>
+                ) : null}
               </Grid>
-              <Button
-                type="submit"
-                fullWidth
-                variant="outlined"
-                color="primary"
-                className={classes.submit}
-              >
-                Registrarse
-              </Button>
+                <Grid container spacing={3}>
+                  <Grid item xs={6}>
+                    <Button
+                      type="submit"
+                      fullWidth
+                      variant="outlined"
+                      color="primary"
+                      className={classes.submit}
+                      onClick={edit? handleClose : null}
+                    >
+                      {edit? 'Terminar Edición' : 'Registrarse'}
+                    </Button>
+                  </Grid>
+                  <Grid item xs={6}>
+                    <Button
+                      fullWidth
+                      variant="outlined"
+                      color="secondary"
+                      className={classes.submit}
+                      onClick={edit? handleClose : () => window.location.replace('/')}
+                    >
+                      Cancelar
+                    </Button>
+                  </Grid>
+                </Grid>
             </Form>
           )}
         </Formik>
@@ -190,24 +192,4 @@ const Register = () => {
   );
 };
 
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    marginTop: theme.spacing(1),
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: "#3A3635",
-  },
-  form: {
-    width: "100%",
-    marginTop: theme.spacing(1),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-}));
-
-export default Register;
+export default FormEditRegister;

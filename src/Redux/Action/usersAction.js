@@ -15,8 +15,15 @@ export const getUsers = () => (dispatch) => {
     })
 }
 
-export const editUser = (id, values) => (dispatch) => {
-    Axios.put(`${url}/users/edit/${id}`, values).then(res => {
+export const createUser = (data) => {
+    Axios.post(`${url}/users/register`, data).then(() => {
+      return window.location.replace("/");
+    });
+  };
+  
+
+export const editUser = (id, data) => (dispatch) => {
+    Axios.put(`${url}/users/edit/${id}`, data).then(res => {
         dispatch({
             type: EDIT_USER,
             payload: res.data

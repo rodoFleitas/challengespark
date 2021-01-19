@@ -49,11 +49,3 @@ export const userProfile = () => (dispatch) => {
     localStorage.setItem("userLog", JSON.stringify(userLog));
   });
 };
-
-
-export const createUser = (data) => {
-  Axios.post(`${url}/users/register`, data).then(() => {
-    return window.location.replace("/");
-  });
-};
-

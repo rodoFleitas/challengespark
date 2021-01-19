@@ -7,7 +7,7 @@ import PublicRoutes from './Routes/publicRoutes.js'
 const App = () => {
 
   const userLog = useSelector((state) => state.myuser)
-  const isAuth = userLog.userLog.id ? true : false
+  const isAuth = userLog.userLog.id?  true : false
   const isAdmin = userLog.userLog.admin
 
   return (

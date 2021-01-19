@@ -19,6 +19,7 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import DonutLargeIcon from "@material-ui/icons/DonutLarge";
 import { useDispatch, useSelector } from "react-redux";
 import { getUsers, deleteUser } from "../Redux/Action/usersAction";
+import Modal from "./Modal";
 
 const descendingComparator = (a, b, orderBy) => {
   if (b[orderBy] < a[orderBy]) {
@@ -28,13 +29,13 @@ const descendingComparator = (a, b, orderBy) => {
     return 1;
   }
   return 0;
-}
+};
 
 const getComparator = (order, orderBy) => {
   return order === "desc"
     ? (a, b) => descendingComparator(a, b, orderBy)
     : (a, b) => -descendingComparator(a, b, orderBy);
-}
+};
 
 const stableSort = (array, comparator) => {
   const stabilizedThis = array.map((el, index) => [el, index]);
@@ -44,7 +45,7 @@ const stableSort = (array, comparator) => {
     return a[1] - b[1];
   });
   return stabilizedThis.map((el) => el[0]);
-}
+};
 
 const headCells = [
   {
@@ -80,7 +81,7 @@ const EnhancedTableHead = ({ order, orderBy, onRequestSort }) => {
           <TableCell
             key={headCell.id}
             align="center"
-            padding='default'
+            padding="default"
             sortDirection={orderBy === headCell.id ? order : false}
           >
             <TableSortLabel
@@ -95,8 +96,7 @@ const EnhancedTableHead = ({ order, orderBy, onRequestSort }) => {
       </TableRow>
     </TableHead>
   );
-}
-
+};
 
 const UsersTable = () => {
   const classes = useStyles();
@@ -105,9 +105,18 @@ const UsersTable = () => {
   const [selected, setSelected] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [open, setOpen] = React.useState(false);
+  const [currentUser, setCUser] = React.useState(null)
+
 
   const dispatch = useDispatch();
   const users = useSelector((state) => state.users.users);
+
+
+  const handleOpen = current => {
+    setOpen(true)
+    setCUser(current)
+  };
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -173,7 +182,7 @@ const UsersTable = () => {
                   const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
-                    <TableRow hover tabIndex={-1} key={user.name}>
+                    <TableRow hover tabIndex={-1} key={user._id}>
                       <TableCell
                         component="th"
                         id={labelId}
@@ -185,9 +194,7 @@ const UsersTable = () => {
                       <TableCell align="center">{user.lastName}</TableCell>
                       <TableCell align="center">{user.email}</TableCell>
                       <TableCell align="center">{user.document}</TableCell>
-                      <TableCell align="center">
-                        {user.dischargeDate}
-                      </TableCell>
+                      <TableCell align="center">{user.dischargeDate}</TableCell>
                       <TableCell align="center">{user.home}</TableCell>
                       <TableCell align="center">
                         <IconButton
@@ -198,7 +205,11 @@ const UsersTable = () => {
                         </IconButton>
                       </TableCell>
                       <TableCell align="center">
-                        <IconButton variant="contained" color="primary">
+                        <IconButton
+                          variant="contained"
+                          color="primary"
+                          onClick={() => handleOpen(user)}
+                        >
                           <EditIcon fontSize="small" />
                         </IconButton>
                       </TableCell>
@@ -211,6 +222,11 @@ const UsersTable = () => {
                           <DeleteIcon />
                         </IconButton>
                       </TableCell>
+                      <Modal
+                        handleClose={() => setOpen(false)}
+                        open={open}
+                        user={currentUser}
+                      />
                     </TableRow>
                   );
                 })}
@@ -233,11 +249,11 @@ const UsersTable = () => {
       </Paper>
     </div>
   );
-}
+};
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    margin: '3% 5%'
+    margin: "3% 5%",
   },
   paper: {
     width: "100%",
@@ -259,4 +275,4 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default UsersTable
+export default UsersTable;
