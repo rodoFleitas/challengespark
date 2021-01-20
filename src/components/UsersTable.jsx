@@ -105,8 +105,9 @@ const UsersTable = () => {
   const [selected, setSelected] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [open, setOpen] = React.useState(false);
-  const [currentUser, setCUser] = React.useState(null)
+  const [open, setOpen] = useState(false);
+  const [currentUser, setCUser] = useState(null)
+  const [type, setType] = useState('')
 
 
   const dispatch = useDispatch();
@@ -200,6 +201,7 @@ const UsersTable = () => {
                         <IconButton
                           variant="contained"
                           style={{ color: "#E34124" }}
+                          onClick={() => {setType(null); handleOpen(user)}}
                         >
                           <DonutLargeIcon fontSize="small" />
                         </IconButton>
@@ -208,7 +210,7 @@ const UsersTable = () => {
                         <IconButton
                           variant="contained"
                           color="primary"
-                          onClick={() => handleOpen(user)}
+                          onClick={() => {setType('edit'); handleOpen(user)}}
                         >
                           <EditIcon fontSize="small" />
                         </IconButton>
@@ -226,6 +228,7 @@ const UsersTable = () => {
                         handleClose={() => setOpen(false)}
                         open={open}
                         user={currentUser}
+                        type={type}
                       />
                     </TableRow>
                   );

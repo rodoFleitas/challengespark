@@ -42,6 +42,20 @@ server.post("/register", async (req, res, next) => {
 server.post("/login", async (req, res, next) => {
   passport.authenticate("login", async (err, user, info) => {
     try {
+      const date = new Date();
+      const currentDay = () => {
+        const shortDate = date.toLocaleDateString("es");
+        return shortDate;
+      };
+      const currentTime = () => {
+        const time =
+          date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+        return time;
+      };
+      const dataDay = {
+        date: currentDay(),
+        time: currentTime(),
+      };
       if (err) return next(err);
       if (!user) return res.json(info);
       req.logIn(user, async (err) => {
@@ -54,7 +68,11 @@ server.post("/login", async (req, res, next) => {
           lastname: user.lastName,
           email: user.email,
           admin: user.admin,
+          document: user.document,
+          home: user.home,
+          totalAccess: user.totalAccesses
         };
+        await user.updateOne({ $push: { totalAccesses: dataDay } });
         const accessToken = jwt.sign(
           { user: body },
           process.env.ACCESS_TOKEN_SECRET
@@ -71,7 +89,6 @@ server.post("/login", async (req, res, next) => {
   })(req, res, next);
 });
 
-
 //Ruta para obtener el perfil basandose en la autenticacion del token
 
 server.get("/profile", authenticateToken, (req, res) => {
@@ -86,37 +103,34 @@ server.get("/logout", (req, res) => {
   res.json({ message: "Has cerrado sesion" });
 });
 
-
 //Ruta para editar un usuario
 
-server.put('/edit/:id', (req, res, next) => {
+server.put("/edit/:id", (req, res, next) => {
   const { id } = req.params;
-  const data = req.body
-  User.findOneAndUpdate({_id : id}, data, {new:true}).then(() => {
-    User.find()
-    .then((users) => {
+  const data = req.body;
+  User.findOneAndUpdate({ _id: id }, data, { new: true }).then(() => {
+    User.find().then((users) => {
       if (!users) {
         return res.status(400).json({ message: "No se encontraron usuarios" });
       }
       res.status(200).json(users);
-    })
-  })
-})
+    });
+  });
+});
 
 //Ruta para eliminar un usuario
 
-server.delete('/delete/:id', (req, res, next) => {
+server.delete("/delete/:id", (req, res, next) => {
   const { id } = req.params;
-  User.findOneAndDelete({_id : id}).then(() => {
-    User.find()
-    .then((users) => {
+  User.findOneAndDelete({ _id: id }).then(() => {
+    User.find().then((users) => {
       if (!users) {
         return res.status(400).json({ message: "No se encontraron usuarios" });
       }
       res.status(200).json(users);
-    })
-  })
-})
+    });
+  });
+});
 
 //Ruta para traer todos los usuarios
 

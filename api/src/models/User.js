@@ -38,7 +38,7 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
-  totalAccesses: Map,
+  totalAccesses: [Map],
   admin: {
       type: Boolean,
       default: () => false

@@ -4,8 +4,9 @@ import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
 import FormEditRegister from "./FormEditRegister";
 import { useStyles } from "./styles";
+import HighchartsUser from "./HighchartsUser";
 
-export default function TransitionsModal({ open, handleClose, user }) {
+export default function TransitionsModal({ open, handleClose, user, type }) {
   const classes = useStyles();
 
   return (
@@ -24,11 +25,15 @@ export default function TransitionsModal({ open, handleClose, user }) {
       >
         <Fade in={open}>
           <div className={classes.papermodal}>
-            <FormEditRegister
-              edit={true}
-              user={user}
-              handleClose={handleClose}
-            />
+            {type === "edit" ? (
+              <FormEditRegister
+                edit={true}
+                user={user}
+                handleClose={handleClose}
+              />
+            ) : (
+              <HighchartsUser />
+            )}
           </div>
         </Fade>
       </Modal>
