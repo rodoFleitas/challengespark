@@ -44,17 +44,15 @@ server.post("/login", async (req, res, next) => {
     try {
       const date = new Date();
       const currentDay = () => {
-        const shortDate = date.toLocaleDateString("es");
+        const day = date.getDate();
+        const year = date.getYear() + 1900;
+        const month = date.getMonth();
+
+        const shortDate= `${year}-${month < 10 ? `0${month + 1}` : month}-${day}`;
         return shortDate;
-      };
-      const currentTime = () => {
-        const time =
-          date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
-        return time;
       };
       const dataDay = {
         date: currentDay(),
-        time: currentTime(),
       };
       if (err) return next(err);
       if (!user) return res.json(info);
@@ -70,7 +68,7 @@ server.post("/login", async (req, res, next) => {
           admin: user.admin,
           document: user.document,
           home: user.home,
-          totalAccess: user.totalAccesses
+          totalAccess: user.totalAccesses,
         };
         await user.updateOne({ $push: { totalAccesses: dataDay } });
         const accessToken = jwt.sign(
