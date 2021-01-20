@@ -14,16 +14,15 @@ export const logInUser = (values) => (dispatch) => {
       alert(res.data.message);
     }
     const userLog = res.data;
+    dispatch({
+      type: LOG_IN,
+      payload: { userLog },
+    });
+    localStorage.setItem("userLog", JSON.stringify(userLog));
     if (userLog.admin) {
-      dispatch({
-        type: LOG_IN,
-        payload: { userLog },
-      });
-      localStorage.setItem("userLog", JSON.stringify(userLog));
       return window.location.replace("/home");
     } else {
-      alert('Usted no es Administrador')
-      return window.location.replace("/");
+      return window.location.replace("/user/profile");
     }
   });
 };
