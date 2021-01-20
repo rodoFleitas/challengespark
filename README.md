@@ -64,21 +64,34 @@ Los usuarios administradores pueden manejar la informacion de los demas usuarios
 ### Back-End
 
 > bcrypt
+>
 > express
+>
 > express session
+>
 > jsonwebtoken
+>
 > moongoose ORM
+>
 > passport
+>
 > dotenv
 
 ### Front-End
 
 > react 
+>
 > redux
+>
 > axios
+>
 > material-ui
+>
 > formik
+>
 > yup
+>
 > highcharts
+>
 > moment
 
