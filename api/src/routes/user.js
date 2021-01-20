@@ -48,7 +48,9 @@ server.post("/login", async (req, res, next) => {
         const year = date.getYear() + 1900;
         const month = date.getMonth();
 
-        const shortDate= `${year}-${month < 10 ? `0${month + 1}` : month}-${day}`;
+        const shortDate = `${year}-${
+          month < 10 ? `0${month + 1}` : month
+        }-${day}`;
         return shortDate;
       };
       const dataDay = {
@@ -87,12 +89,6 @@ server.post("/login", async (req, res, next) => {
   })(req, res, next);
 });
 
-//Ruta para obtener el perfil basandose en la autenticacion del token
-
-server.get("/profile", authenticateToken, (req, res) => {
-  res.send(req.user);
-});
-
 //Ruta para desloguearse
 
 server.get("/logout", (req, res) => {
@@ -103,44 +99,62 @@ server.get("/logout", (req, res) => {
 
 //Ruta para editar un usuario
 
-server.put("/edit/:id", (req, res, next) => {
-  const { id } = req.params;
-  const data = req.body;
-  User.findOneAndUpdate({ _id: id }, data, { new: true }).then(() => {
-    User.find().then((users) => {
-      if (!users) {
-        return res.status(400).json({ message: "No se encontraron usuarios" });
-      }
-      res.status(200).json(users);
+server.put("/edit/:id", authenticateToken, (req, res, next) => {
+  if (req.user.user.admin) {
+    const { id } = req.params;
+    const data = req.body;
+    User.findOneAndUpdate({ _id: id }, data, { new: true }).then(() => {
+      User.find().then((users) => {
+        if (!users) {
+          return res
+            .status(400)
+            .json({ message: "No se encontraron usuarios" });
+        }
+        res.status(200).json(users);
+      });
     });
-  });
+  } else {
+    return res.status(403).json({ message: "Usted no es un aministrador" });
+  }
 });
 
 //Ruta para eliminar un usuario
 
-server.delete("/delete/:id", (req, res, next) => {
-  const { id } = req.params;
-  User.findOneAndDelete({ _id: id }).then(() => {
-    User.find().then((users) => {
-      if (!users) {
-        return res.status(400).json({ message: "No se encontraron usuarios" });
-      }
-      res.status(200).json(users);
+server.delete("/delete/:id", authenticateToken, (req, res, next) => {
+  if (req.user.user.admin) {
+    const { id } = req.params;
+    User.findOneAndDelete({ _id: id }).then(() => {
+      User.find().then((users) => {
+        if (!users) {
+          return res
+            .status(400)
+            .json({ message: "No se encontraron usuarios" });
+        }
+        res.status(200).json(users);
+      });
     });
-  });
+  } else {
+    return res.status(403).json({ message: "Usted no es un aministrador" });
+  }
 });
 
 //Ruta para traer todos los usuarios
 
-server.get("/", (req, res, next) => {
-  User.find()
-    .then((users) => {
-      if (!users) {
-        return res.status(400).json({ message: "No se encontraron usuarios" });
-      }
-      res.status(200).json(users);
-    })
-    .catch(next);
+server.get("/", authenticateToken, (req, res, next) => {
+  if (req.user.user.admin) {
+    User.find()
+      .then((users) => {
+        if (!users) {
+          return res
+            .status(400)
+            .json({ message: "No se encontraron usuarios" });
+        }
+        res.status(200).json(users);
+      })
+      .catch(next);
+  } else {
+    return res.status(403).json({ message: "Usted no es un aministrador" });
+  }
 });
 
 module.exports = server;

@@ -27,7 +27,7 @@ En `api` vas a tener que crear un archivo llamado: `.env` que tenga la siguiente
 
 ```
 ACCESS_TOKEN_SECRET = 246763eb8578a52383296f2a5ae888e3264d276de30cfc3c9228caf63403f79ece274c14c6db14f673091047376d9e5a6c3c8d16e3c932b8c254fabb92de9fd5
-URI = mongodb://localhost:27017/myfirstdb
+URI = mongodb+srv://rodoFleitas:12345@cluster0.qequa.mongodb.net/myfirstdb?retryWrites=true&w=majority
 ```
 
 Este archivo va ser ignorado por github, ya que contiene información sensible (las credenciales) por el momento no es nada, pero si la app fuera mas grande y se llevara a producción estos datos no tienen que estar a la vista.
@@ -36,8 +36,8 @@ Este archivo va ser ignorado por github, ya que contiene información sensible (
 ### Usuario default admin
 
 ```
-email: 
-password: 
+email: admin@gmail.com
+password: admin101
 ```
 
 ### Usuarios no Autenticados

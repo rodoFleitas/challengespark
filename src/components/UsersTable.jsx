@@ -106,17 +106,15 @@ const UsersTable = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [open, setOpen] = useState(false);
-  const [currentUser, setCUser] = useState(null)
-  const [type, setType] = useState('')
-
+  const [currentUser, setCUser] = useState(null);
+  const [type, setType] = useState("");
 
   const dispatch = useDispatch();
   const users = useSelector((state) => state.users.users);
 
-
-  const handleOpen = current => {
-    setOpen(true)
-    setCUser(current)
+  const handleOpen = (current) => {
+    setOpen(true);
+    setCUser(current);
   };
 
   const handleRequestSort = (event, property) => {
@@ -201,7 +199,10 @@ const UsersTable = () => {
                         <IconButton
                           variant="contained"
                           style={{ color: "#E34124" }}
-                          onClick={() => {setType(null); handleOpen(user)}}
+                          onClick={() => {
+                            setType(null);
+                            handleOpen(user);
+                          }}
                         >
                           <DonutLargeIcon fontSize="small" />
                         </IconButton>
@@ -210,7 +211,10 @@ const UsersTable = () => {
                         <IconButton
                           variant="contained"
                           color="primary"
-                          onClick={() => {setType('edit'); handleOpen(user)}}
+                          onClick={() => {
+                            setType("edit");
+                            handleOpen(user);
+                          }}
                         >
                           <EditIcon fontSize="small" />
                         </IconButton>
@@ -219,7 +223,15 @@ const UsersTable = () => {
                         <IconButton
                           variant="contained"
                           style={{ color: "#F81000" }}
-                          onClick={() => dispatch(deleteUser(user._id))}
+                          onClick={() => {
+                            if (
+                              window.confirm(
+                                `Estas seguro de eliminar a ${user.name}?`
+                              )
+                            ) {
+                              dispatch(deleteUser(user._id));
+                            }
+                          }}
                         >
                           <DeleteIcon />
                         </IconButton>

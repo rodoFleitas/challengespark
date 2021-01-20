@@ -39,7 +39,6 @@ const FormEditRegister = ({ edit, user, handleClose }) => {
         home: values.home,
         document: values.document,
       };
-      console.log(data, id);
       dispatch(editUser(id, data));
     } else {
       dispatch(createUser(values));

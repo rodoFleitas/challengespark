@@ -15,7 +15,6 @@ const filter = (totalAccess) => {
   for (let i = 0; i < totalAccess.length; i++) {
     name = totalAccess[i].date;
     fecha2 = moment(name);
-    console.log("Diferencias ", fecha1.diff(fecha2, "days"));
     if (fecha1.diff(fecha2, "days") <= 7) {
       count++;
       for (let j = i + 1; j < totalAccess.length; j++) {
@@ -35,15 +34,10 @@ const filter = (totalAccess) => {
     }
   }
 
-  console.log("Series ==> ", series);
-
   return series;
 };
 
-const HighchartsUser = () => {
-  const userAccess = useSelector((state) => state.myuser.userLog.totalAccess);
-  console.log(userAccess);
-
+const HighchartsUser = ({user}) => {
   const options = {
     chart: {
       type: "column",
@@ -51,7 +45,7 @@ const HighchartsUser = () => {
     title: {
       text: "Conexiones en la ultima semana",
     },
-    series: filter(userAccess),
+     series: filter(user.totalAccesses),
   };
 
   return (

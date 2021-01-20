@@ -32,7 +32,7 @@ export default function TransitionsModal({ open, handleClose, user, type }) {
                 handleClose={handleClose}
               />
             ) : (
-              <HighchartsUser />
+              <HighchartsUser user={user}/>
             )}
           </div>
         </Fade>
