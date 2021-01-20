@@ -33,6 +33,10 @@ URI = mongodb+srv://rodoFleitas:12345@cluster0.qequa.mongodb.net/myfirstdb?retry
 Este archivo va ser ignorado por github, ya que contiene información sensible (las credenciales) por el momento no es nada, pero si la app fuera mas grande y se llevara a producción estos datos no tienen que estar a la vista.
 
 
+### Iniciar servidor y React APP
+
+Ejecutar `npm start` desde la consola sobre el proyecto, de igual manera situarse dentro de la carpeta `/api` y ejecutar un `npm start` para iniciar el back-end. 
+
 ### Usuario default admin
 
 ```
