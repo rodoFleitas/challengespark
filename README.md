@@ -57,3 +57,41 @@ Los usuarios que hayan creado su cuenta, podrán solo ver información de su per
 ### Admin
 
 Los usuarios administradores pueden manejar la informacion de los demas usuarios, como editarlos, ver sus conexiones en la ultima semana y eliminarlos.
+
+
+## Dependencias Utilizadas
+
+### Back-End
+
+> bcrypt
+>
+> express
+>
+> express session
+>
+> jsonwebtoken
+>
+> moongoose ORM
+>
+> passport
+>
+> dotenv
+
+### Front-End
+
+> react 
+>
+> redux
+>
+> axios
+>
+> material-ui
+>
+> formik
+>
+> yup
+>
+> highcharts
+>
+> moment
+
