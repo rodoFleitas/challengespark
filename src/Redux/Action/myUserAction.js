@@ -12,17 +12,18 @@ export const logInUser = (values) => (dispatch) => {
     console.log(res);
     if (res.data.message) {
       alert(res.data.message);
-    }
-    const userLog = res.data;
-    dispatch({
-      type: LOG_IN,
-      payload: { userLog },
-    });
-    localStorage.setItem("userLog", JSON.stringify(userLog));
-    if (userLog.admin) {
-      return window.location.replace("/home");
     } else {
-      return window.location.replace("/user/profile");
+      const userLog = res.data;
+      dispatch({
+        type: LOG_IN,
+        payload: { userLog },
+      });
+      localStorage.setItem("userLog", JSON.stringify(userLog));
+      if (userLog.admin) {
+        return window.location.replace("/home");
+      } else {
+        return window.location.replace("/user/profile");
+      }
     }
   });
 };
